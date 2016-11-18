@@ -15,17 +15,17 @@ Packages made config to run this app:
 
 1. composer - https://getcomposer.org/download/
 2. slim framework - http://www.slimframework.com/docs/start/installation.html
-   - If you installed composer, then open the project main folder in command prompt and run the command below:
+   - If you installed composer, then open the project main folder in command prompt and run the command:
      composer require slim/slim "^3.0"
 3. twig-view
-   - Open your project folder in cmd prompt and run the command below:
+   - Open your project folder in cmd prompt and run the command:
      composer require slim/twig-view
 4. validations
-   - Open your project folder in cmd prompt and run the command below:
+   - Open your project folder in cmd prompt and run the command:
      composer require respect/validation
 5. cross-site request forgery (security)
-   - Open your project folder in cmd prompt and run the command below:
+   - Open your project folder in cmd prompt and run the command:
      composer require slim/csrf
 6. For showing flash messages
-   - Open your project folder in cmd prompt and run the command below:
+   - Open your project folder in cmd prompt and run the command:
      composer require slim/flash
