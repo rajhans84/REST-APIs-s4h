@@ -1,0 +1,5 @@
+vendor/
+bin/
+client.http
+db/authentication.sql
+.vscode/

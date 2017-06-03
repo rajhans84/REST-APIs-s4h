@@ -1,7 +1,23 @@
 <?php
 
 	use Respect\Validation\Validator as v;
-	
+	use Illuminate\Database\Capsule\Manager as Capsule;
+	use App\Controllers\HomeController as HomeController;
+	use App\Controllers\Auth\AuthController as AuthController;
+	use App\Controllers\PostsController as PostsController;
+	use App\Controllers\Auth\PasswordController as PasswordController;
+	use App\Middleware\ValidationErrorsMiddleware as ValidationErrorsMiddleware;
+	use App\Middleware\OldInputMiddleware as OldInputMiddleware;
+	use App\Middleware\CsrfViewMiddleware as CsrfViewMiddleware;
+	use App\Middleware\MediaTypeParserMiddleware as MediaTypeParserMiddleware;
+	use App\Validation\Validator as Validator;
+	use App\Auth\Auth as Auth;
+	use Slim\Flash\Messages as Messages;
+	use Slim\Views\Twig as Twig;
+	use Slim\Views\TwigExtension as TwigExtension;
+	use Slim\Csrf\Guard as Guard;
+	use App\Validation\Rules as Rules;
+
 	session_start();
 
 	require __DIR__ . '/../vendor/autoload.php';
@@ -14,7 +30,7 @@
 			'db' => [
 				'driver' => 'mysql',
 		    'host' => 'localhost',
-		    'database' => 'authentication',
+		    'database' => 'share4happiness',
 		    'username' => 'root',
 		    'password' => 'root',
 		    'charset' => 'latin1',
@@ -27,7 +43,7 @@
 
 	$container = $app->getContainer();
 
-	$capsule = new \Illuminate\Database\capsule\Manager;
+	$capsule = new Capsule;
 	$capsule->addConnection($container['settings']['db']);
 	$capsule->setAsGlobal();
 	$capsule->bootEloquent();
@@ -37,20 +53,20 @@
 
 	$container['auth'] = function($container) {
 
-		return new \App\Auth\Auth;
+		return new Auth;
 	};
 
 	$container['flash'] = function($container) {
-		return new \Slim\Flash\Messages;
+		return new Messages;
 	};
 
 	$container['view'] = function($container) {
 
-		$view = new \Slim\Views\Twig(__DIR__ . '/../resources/views', [
+		$view = new Twig(__DIR__ . '/../resources/views', [
 			'cache' => false,
 		]);
 
-		$view->addExtension(new \Slim\Views\TwigExtension(
+		$view->addExtension(new TwigExtension(
 			$container->router,
 			$container->request->getUri()
 		));
@@ -67,36 +83,42 @@
 
 	$container['validator'] = function($container) {
 
-		return new \App\Validation\Validator;
+		return new Validator;
 	};
 
 	$container['HomeController'] = function($container) {
 
-		return new \App\Controllers\HomeController($container);
+		return new HomeController($container);
 	};
 
 	$container['AuthController'] = function($container) {
 
-		return new \App\Controllers\Auth\AuthController($container);
+		return new AuthController($container);
 	};
 
 	$container['PasswordController'] = function($container) {
 
-		return new \App\Controllers\Auth\PasswordController($container);
+		return new PasswordController($container);
+	};
+
+	$container['PostsController'] = function($container) {
+
+		return new PostsController($container);
 	};
 
 	$container['csrf'] = function($container) {
 
-		return new \Slim\Csrf\Guard;
+		return new Guard;
 	};
 
-	$app->add(new \App\Middleware\ValidationErrorsMiddleware($container));
-	$app->add(new \App\Middleware\OldInputMiddleware($container));
-	$app->add(new \App\Middleware\CsrfViewMiddleware($container));
+	$app->add(new ValidationErrorsMiddleware($container));
+	$app->add(new OldInputMiddleware($container));
+	// $app->add(new MediaTypeParserMiddleware($container));
+	// $app->add(new CsrfViewMiddleware($container));
 
-	$app->add($container->csrf);
+	// $app->add($container->csrf);
 
-	v::with('App\\Validation\\Rules\\');
+	v::with('App\\Validation\\Rules');
 
 	require __DIR__ . '/../app/routes.php';
 
