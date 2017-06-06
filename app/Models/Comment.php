@@ -7,6 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 class Comment extends Model
 {   
     protected $table = 'comments';
+    protected $fillable = [
+    		'content',
+    		'user_id',
+    		'post_id'
+    ];
+    public function user()
+    {
+    	return $this->hasOne('App\Models\User');
+    }
+
     /**
      * Get the post that owns the comment.
      */
@@ -14,6 +24,7 @@ class Comment extends Model
     {
         return $this->belongsTo('App\Models\Post');
     }
+
     /**
      * Get all of the comment's likes.
      */

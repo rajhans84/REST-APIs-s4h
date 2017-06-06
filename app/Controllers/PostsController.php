@@ -11,10 +11,18 @@
 	{
 		public function index($request, $response)
 		{
-			Post::with('comments')->all();
+			$id = $request->getAttribute('id');
+			$posts = $id == null ? Post::all(): Post::find($id);
 			return $response->withJson($posts, 200);
 		}
-	
+		
+// 		public function comments($request, $response)
+// 		{
+// 			$postid= $request->getAttribute('postid');
+// 			$posts = $postid== null ? Comment::post(): Post::find($postid);
+// 			return $response->withJson($posts, 200);
+// 		}
+
 		public function store($request, $response)
 		{
 			$validation = $this->validator->validate($request, [
@@ -37,13 +45,6 @@
 
 			return $response->withJson($data, 204);
 		}
-
-		public function comments($request, $response)
-		{
-			$posts = Post::with('comments')->all();
-			return $response->withJson($posts, 200);
-		}
-
 	}
 
 ?>

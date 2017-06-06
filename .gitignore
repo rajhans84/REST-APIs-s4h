@@ -1,5 +1,10 @@
-vendor/
-bin/
+vendor/*
+bin/*
 client.http
 db/authentication.sql
-.vscode/
+.vscode/*
+.buildpath
+.project
+composer.lock
+.settings/*
+composer-setup.php

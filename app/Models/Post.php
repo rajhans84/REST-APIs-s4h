@@ -8,7 +8,8 @@
 	{
 		protected $table = 'posts';
 		protected $fillable = [
-			'content',
+				'user_id',
+				'content'
 		];
 
 		/**
@@ -18,7 +19,7 @@
 		{
 			return $this->hasMany('App\Models\Comment');
 		}
-
+	
 		/**
 		* Get all of the post's likes.
 		*/

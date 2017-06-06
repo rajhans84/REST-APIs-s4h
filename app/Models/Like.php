@@ -5,7 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 class Like extends Model
-{
+{   
+    protected $fillable = [
+        'user_id',
+        'likable_id',
+        'likable_type',
+        'value'
+    ];
     /**
      * Get all of the owning Likeable models.
      */
